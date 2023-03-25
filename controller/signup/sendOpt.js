@@ -59,7 +59,10 @@ module.exports.setOpt = async (req, res) => {
                     })
                 } else {
                     sendMail()
-                    res.send('seccuess')
+                    res.status(200).json({
+                        status: true,
+                        massage: `send OTP on ${email}`,
+                    })
                 }
             })
         } else {
