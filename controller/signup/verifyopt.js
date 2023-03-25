@@ -1,10 +1,37 @@
 const { userModal } = require('../')
+
 module.exports.verifyOpt = async (req, res) => {
     const { opt, email } = req.body
     if (opt && email) {
-        const isExist = await userModal.findOne({ email, otp })
-        console.log(isExist)
-        res.send("here")
+        try {
+            const isExist = await userModal.findOne({ email })
+            if (isExist) {
+                if (isExist.opt === opt) {
+                    const update = await userModal.replaceOne({ email, opt }, {
+                        opt: '',
+                    })
+                    if (update.modifiedCount !== 1) {
+                        throw new Error('Something went wrong')
+                    }
+                    res.status(200).json({
+                        status: true,
+                        massage: 'email verify success',
+                    })
+
+                } else {
+                    throw new Error('Enter valid OTP')
+                }
+
+            } else {
+                throw new Error('invalid credentials')
+            }
+        } catch (error) {
+            res.status(401).json({
+                status: false,
+                message: error.message
+            })
+
+        }
     } else {
         res.send('invalid OTP')
     }
