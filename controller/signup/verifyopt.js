@@ -7,8 +7,8 @@ module.exports.verifyOpt = async (req, res) => {
             const isExist = await userModal.findOne({ email })
             if (isExist) {
                 if (isExist.opt === opt) {
-                    const update = await userModal.replaceOne({ email, opt }, {
-                        opt: '',
+                    const update = await userModal.updateOne({ email, opt }, {
+                        opt: opt,
                     })
                     if (update.modifiedCount !== 1) {
                         throw new Error('Something went wrong')

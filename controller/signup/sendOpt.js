@@ -1,5 +1,23 @@
 const { userModal } = require('../')
 const nodemailer = require('nodemailer')
+
+const sendEmail = (transport, mailoption, res) => {
+    transport.sendMail(mailoption, (error, result) => {
+        if (error) {
+            console.log(error)
+            res.status(500).json({
+                massage: error,
+                status: false,
+            })
+        } else {
+            res.status(200).json({
+                status: true,
+                massage: `send OTP on ${mailoption.to}`,
+            })
+        }
+    })
+}
+
 module.exports.setOpt = async (req, res) => {
     const { email } = req.body
     // email transport 
@@ -19,37 +37,16 @@ module.exports.setOpt = async (req, res) => {
         html: `<p>your verification OPT is <b>${OPT}</b></p>`
     }
 
-    // check is exists ? 
-    const isExists = await userModal.findOne({ email })
-    const username = email.split("@")
-    const fromData = new userModal({
-        email: email,
-        opt: OPT,
-        username: username[0],
-        password: OPT,
-    })
-
-    const sendMail = () => {
-        transport.sendMail(mailoption, (error, result) => {
-            try {
-                if (error) {
-                    throw error
-                } else {
-                    res.status(200).json({
-                        status: true,
-                        massage: `send OTP on ${email}`,
-                    })
-                }
-            } catch (error) {
-                res.status(500).json({
-                    massage: error,
-                    status: false,
-                })
-            }
-        })
-    }
-
     try {
+        const isExists = await userModal.findOne({ email })
+        const username = email.split("@")
+        const fromData = new userModal({
+            email: email,
+            opt: OPT,
+            username: username[0],
+            password: OPT,
+        })
+
         if (isExists === null) {
             fromData.save().then((result, error) => {
                 if (error) {
@@ -58,11 +55,7 @@ module.exports.setOpt = async (req, res) => {
                         massage: 'internal server error',
                     })
                 } else {
-                    sendMail()
-                    res.status(200).json({
-                        status: true,
-                        massage: `send OTP on ${email}`,
-                    })
+                    sendEmail(transport, mailoption, res)
                 }
             })
         } else {
@@ -78,13 +71,16 @@ module.exports.setOpt = async (req, res) => {
                     username: username[0],
                     password: OPT,
                 })
-                sendMail()
+                if (update.modifiedCount !== 1) {
+                    throw new Error('Something went wrong')
+                }
+                sendEmail(transport, mailoption, res)
             }
         }
     } catch (error) {
         res.status(500).json({
             status: false,
-            massage: error,
+            massage: error.message,
         })
     }
 }
