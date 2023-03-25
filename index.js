@@ -1,8 +1,8 @@
 const express = require('express')
 const app = express()
 const fileUpload = require('express-fileupload')
-const router = require('./router')
 const dot = require('dotenv').config()
+const router = require('./router')
 const cors = require('cors')
 const port = process.env.PORT || 2917
 app.use(express.json())

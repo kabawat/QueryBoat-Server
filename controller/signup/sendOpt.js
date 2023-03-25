@@ -65,7 +65,7 @@ module.exports.setOpt = async (req, res) => {
                     massage: 'Email Already Exists',
                 })
             } else {
-                const update = await userModal.replaceOne({ username: username[0] }, {
+                const update = await userModal.updateOne({ username: username[0] }, {
                     email: email,
                     opt: OPT,
                     username: username[0],
