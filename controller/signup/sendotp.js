@@ -1,4 +1,4 @@
-const { userModal } = require('../')
+const { userModal } = require('..')
 const nodemailer = require('nodemailer')
 
 const sendEmail = (transport, mailoption, res) => {
@@ -18,7 +18,7 @@ const sendEmail = (transport, mailoption, res) => {
     })
 }
 
-module.exports.setOpt = async (req, res) => {
+module.exports.send_otp = async (req, res) => {
     const { email } = req.body
     // email transport 
     const transport = nodemailer.createTransport({
@@ -29,12 +29,12 @@ module.exports.setOpt = async (req, res) => {
             pass: 'umywypawbwiurzkb'
         }
     })
-    const OPT = Math.floor(Math.random() * 1000000)
+    const otp = Math.floor(Math.random() * 1000000)
     const mailoption = {
         from: 'testbymukesh@gmail.com',
         to: email,
         subject: 'email verification',
-        html: `<p>your verification OPT is <b>${OPT}</b></p>`
+        html: `<p>your verification otp is <b>${otp}</b></p>`
     }
 
     try {
@@ -42,9 +42,9 @@ module.exports.setOpt = async (req, res) => {
         const username = email.split("@")
         const fromData = new userModal({
             email: email,
-            opt: OPT,
+            otp: otp,
             username: username[0],
-            password: OPT,
+            password: otp,
         })
 
         if (isExists === null) {
@@ -67,9 +67,9 @@ module.exports.setOpt = async (req, res) => {
             } else {
                 const update = await userModal.updateOne({ username: username[0] }, {
                     email: email,
-                    opt: OPT,
+                    otp: otp,
                     username: username[0],
-                    password: OPT,
+                    password: otp,
                 })
                 if (update.modifiedCount !== 1) {
                     throw new Error('Something went wrong')

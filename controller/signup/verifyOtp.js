@@ -1,14 +1,14 @@
-const { userModal } = require('../')
+const { userModal } = require('..')
 
-module.exports.verifyOpt = async (req, res) => {
-    const { opt, email } = req.body
-    if (opt && email) {
+module.exports.verifyOtp = async (req, res) => {
+    const { otp, email } = req.body
+    if (otp && email) {
         try {
             const isExist = await userModal.findOne({ email })
             if (isExist) {
-                if (isExist.opt === opt) {
-                    const update = await userModal.updateOne({ email, opt }, {
-                        opt: opt,
+                if (isExist.otp === otp) {
+                    const update = await userModal.updateOne({ email, otp }, {
+                        otp: otp,
                     })
                     if (update.modifiedCount !== 1) {
                         throw new Error('Something went wrong')

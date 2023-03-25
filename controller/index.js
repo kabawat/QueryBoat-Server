@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    opt: {
+    otp: {
         type: String,
         required: true,
     },
@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    profile_image: String
 }, { timestamps: true })
 const userModal = new mongoose.model('userdata', userSchema)
 module.exports = { userModal }
