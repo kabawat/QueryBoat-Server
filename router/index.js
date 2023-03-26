@@ -5,7 +5,9 @@ const { verifyOtp } = require('../controller/signup/verifyOtp')
 const { signup } = require('../middleware/signup')
 const { registration } = require('../controller/signup')
 const { verifyLogin } = require('../middleware/login')
-const {login} = require('../controller/login')
+const { login } = require('../controller/login')
+const { verify } = require('../middleware/verify')
+const { profile } = require('../controller/profile')
 router.get('/', (req, res) => {
     res.status(200).json({
         massage: 'wellcome to Query Boat',
@@ -22,5 +24,6 @@ router.post('/registration', signup, registration)
 // login 
 router.post('/login', verifyLogin, login)
 
+router.get('/profile/:user', verify, profile)
 
 module.exports = router
