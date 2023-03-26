@@ -16,7 +16,7 @@ const sendEmail = (transport, mailoption, res) => {
 
 module.exports.registration = async (req, res) => {
     try {
-        const { email, username, password } = req.body
+        const { _id, email, username, password } = req?.userData?._doc
         const transport = nodemailer.createTransport({
             service: "gmail",
             secure: true,
@@ -43,7 +43,7 @@ module.exports.registration = async (req, res) => {
         }
 
         const rootDir = path.dirname(require.main.filename);
-        let profile_image = path.join(rootDir, `public/user/profile.png`)
+        let profile_image = '/user/profile.png'
         if (req?.files?.profile) {
             if (req.files.profile.length) {
                 throw new Error('multiple files not allowed')
@@ -59,7 +59,7 @@ module.exports.registration = async (req, res) => {
                 const filename = `${username}-${new Date().getTime()}${path.extname(profile.name)}`
                 const saveFile = path.join(rootDir, `public/user/${filename}`);
                 profile.mv(saveFile);
-                profile_image = saveFile;
+                profile_image = `/user/${filename}`;
             }
         }
 
@@ -74,15 +74,13 @@ module.exports.registration = async (req, res) => {
         if (update.modifiedCount !== 1) {
             throw new Error('Something went wrong')
         }
-        const token = jwt.sign({ email, username }, PRIVATE_KEY_JWT)
+        const token = jwt.sign({ _id }, PRIVATE_KEY_JWT)
         sendEmail(transport, mailoption, res)
         res.status(200).json({
             status: true,
             massage: 'registration successful',
             token
         })
-
-
     } catch (error) {
         res.status(401).json({
             status: false,

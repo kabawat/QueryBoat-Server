@@ -9,6 +9,7 @@ module.exports.signup = async (req, res, next) => {
                 const isExist = await userModal.findOne({ email: email })
                 if (isExist) {
                     if (isExist.status === false) {
+                        req.userData = { ...isExist, password }
                         next()
                     } else {
                         throw new Error('Something went wrong')
