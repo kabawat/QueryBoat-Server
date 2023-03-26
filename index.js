@@ -9,6 +9,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 app.use(fileUpload())
+app.use('/user', express.static(path.join(__dirname, 'public/user')))
 app.use(router)
 
 app.listen(port, () => {
