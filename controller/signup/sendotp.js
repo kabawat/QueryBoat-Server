@@ -52,7 +52,7 @@ module.exports.send_otp = async (req, res) => {
                 if (error) {
                     res.status(500).json({
                         status: false,
-                        massage: 'internal server error',
+                        massage: 'Internal server error',
                     })
                 } else {
                     sendEmail(transport, mailoption, res)
@@ -72,7 +72,7 @@ module.exports.send_otp = async (req, res) => {
                     password: otp,
                 })
                 if (update.modifiedCount !== 1) {
-                    throw new Error('Something went wrong')
+                    throw new Error('Internal server error')
                 }
                 sendEmail(transport, mailoption, res)
             }

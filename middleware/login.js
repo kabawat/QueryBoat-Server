@@ -1,5 +1,4 @@
-const { userModal } = require('../controller');
-
+const { userModal } = require('../controller/');
 module.exports.verifyLogin = async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -13,7 +12,6 @@ module.exports.verifyLogin = async (req, res, next) => {
         req.userdata = { ...user };
         next();
     } catch (error) {
-        console.error(error.message);
         res.status(401).json({
             status: false,
             message: error.message,

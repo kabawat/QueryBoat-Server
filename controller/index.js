@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    token: String,
     profile_image: String
 }, { timestamps: true })
 const userModal = new mongoose.model('userdata', userSchema)
