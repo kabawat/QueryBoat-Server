@@ -14,5 +14,6 @@ router.get('/', (req, res) => {
 router.post('/sendotp', send_otp)
 router.post('/verify-email', verifyOtp)
 router.post('/registration', signup, registration)
+app.use('/user', express.static(path.join(__dirname, 'public/user')))
 
 module.exports = router
