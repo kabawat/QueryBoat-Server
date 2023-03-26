@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const fileUpload = require('express-fileupload')
+const path = require('path')
 const dot = require('dotenv').config()
 const router = require('./router')
 const cors = require('cors')
