@@ -7,7 +7,7 @@ const sendEmail = (transport, mailoption, res) => {
     transport.sendMail(mailoption, (error, result) => {
         if (error) {
             res.status(500).json({
-                massage: error,
+                message: error,
                 status: false,
             })
         }
@@ -78,13 +78,13 @@ module.exports.registration = async (req, res) => {
         sendEmail(transport, mailoption, res)
         res.status(200).json({
             status: true,
-            massage: 'registration successful',
+            message: 'registration successful',
             token
         })
     } catch (error) {
         res.status(401).json({
             status: false,
-            massage: error.message
+            message: error.message
         })
     }
 }

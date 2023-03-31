@@ -5,13 +5,13 @@ const sendEmail = (transport, mailoption, res) => {
     transport.sendMail(mailoption, (error, result) => {
         if (error) {
             res.status(500).json({
-                massage: error,
+                message: error,
                 status: false,
             })
         } else {
             res.status(200).json({
                 status: true,
-                massage: `send OTP on ${mailoption.to}`,
+                message: `send OTP on ${mailoption.to}`,
             })
         }
     })
@@ -46,7 +46,7 @@ module.exports.send_otp = async (req, res) => {
         const fromData = new userModal({
             email: email,
             otp: otp,
-            username: username[0],
+            username: `${username[0]}${otp}`,
             password: otp,
         })
 
@@ -55,7 +55,7 @@ module.exports.send_otp = async (req, res) => {
                 if (error) {
                     res.status(500).json({
                         status: false,
-                        massage: 'Internal server error',
+                        message: 'Internal server error',
                     })
                 } else {
                     sendEmail(transport, mailoption, res)
@@ -65,7 +65,7 @@ module.exports.send_otp = async (req, res) => {
             if (isExists.status) {
                 res.status(409).json({
                     status: false,
-                    massage: 'Email Already Exists',
+                    message: 'Email Already Exists',
                 })
             } else {
                 const update = await userModal.updateOne({ username: username[0] }, {
@@ -83,7 +83,7 @@ module.exports.send_otp = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             status: false,
-            massage: error.message,
+            message: error.message,
         })
     }
 }

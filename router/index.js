@@ -6,11 +6,11 @@ const { signup } = require('../middleware/signup')
 const { registration } = require('../controller/signup')
 const { verifyLogin } = require('../middleware/login')
 const { login } = require('../controller/login')
-const { verify } = require('../middleware/verify')
+const { verify, usernameUnique } = require('../middleware/verify')
 const { profile } = require('../controller/profile')
 router.get('/', (req, res) => {
     res.status(200).json({
-        massage: 'wellcome to Query Boat',
+        message: 'wellcome to Query Boat',
         status: true,
         data: []
     })
@@ -19,6 +19,7 @@ router.get('/', (req, res) => {
 // registration
 router.post('/sendotp', send_otp)
 router.post('/verify-email', verifyOtp)
+router.post('/verify-username', usernameUnique)
 router.post('/registration', signup, registration)
 
 // login 

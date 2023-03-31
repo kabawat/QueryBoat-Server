@@ -15,7 +15,7 @@ module.exports.verifyOtp = async (req, res) => {
                     }
                     res.status(200).json({
                         status: true,
-                        massage: 'email verify success',
+                        message: 'email verify success',
                     })
 
                 } else {

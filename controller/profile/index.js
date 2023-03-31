@@ -14,13 +14,13 @@ module.exports.profile = async (req, res) => {
         }
         res.status(200).json({
             status: true,
-            massage: "success",
+            message: "success",
             data: profile
         })
     } catch (error) {
         res.status(409).json({
             status: false,
-            massage: error.message,
+            message: error.message,
             data: {}
         })
     }
