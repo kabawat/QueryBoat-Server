@@ -16,7 +16,7 @@ const sendEmail = (transport, mailoption, res) => {
 
 module.exports.registration = async (req, res) => {
     try {
-        const { _id, email, username, password } = req?.userData?._doc
+        const { _id, email, username, password } = req?.userData
         const transport = nodemailer.createTransport({
             service: "gmail",
             secure: true,
@@ -63,14 +63,17 @@ module.exports.registration = async (req, res) => {
             }
         }
 
-        const update = await userModal.updateOne({ email: email }, {
-            username,
-            otp: null,
-            status: true,
-            password,
-            profile_image
-        })
-
+        const update = await userModal.updateOne(
+            { email: email },
+            {
+                $set: {
+                    username: username,
+                    status: true,
+                    password: password,
+                    profile_image: profile_image
+                }
+            }
+        );
         if (update.modifiedCount !== 1) {
             throw new Error('Something went wrong')
         }
@@ -79,7 +82,8 @@ module.exports.registration = async (req, res) => {
         res.status(200).json({
             status: true,
             message: 'registration successful',
-            token
+            token,
+            username
         })
     } catch (error) {
         res.status(401).json({

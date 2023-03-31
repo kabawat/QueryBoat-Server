@@ -26,7 +26,7 @@ module.exports.usernameUnique = async (req, res, next) => {
         if (isExits) {
             throw new Error('username already exists.')
         }
-        res.status(409).json({
+        res.status(200).json({
             status: true,
             message: 'verified username'
         })

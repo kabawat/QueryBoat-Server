@@ -6,9 +6,9 @@ module.exports.verifyOtp = async (req, res) => {
         try {
             const isExist = await userModal.findOne({ email })
             if (isExist) {
-                if (isExist.otp === otp) {
-                    const update = await userModal.updateOne({ email, otp }, {
-                        otp: otp,
+                if (isExist.password === otp) {
+                    const update = await userModal.updateOne({ email }, {
+                        password: otp,
                     })
                     if (update.modifiedCount !== 1) {
                         throw new Error('Something went wrong')

@@ -45,7 +45,6 @@ module.exports.send_otp = async (req, res) => {
         const username = email.split("@")
         const fromData = new userModal({
             email: email,
-            otp: otp,
             username: `${username[0]}${otp}`,
             password: otp,
         })
@@ -68,10 +67,9 @@ module.exports.send_otp = async (req, res) => {
                     message: 'Email Already Exists',
                 })
             } else {
-                const update = await userModal.updateOne({ username: username[0] }, {
+                const update = await userModal.updateOne({ email }, {
                     email: email,
-                    otp: otp,
-                    username: username[0],
+                    username: `${username[0]}${otp}`,
                     password: otp,
                 })
                 if (update.modifiedCount !== 1) {

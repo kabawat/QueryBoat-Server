@@ -20,10 +20,6 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    otp: {
-        type: String,
-        required: true,
-    },
     status: {
         type: Boolean,
         default: false,
