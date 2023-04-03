@@ -19,17 +19,16 @@ module.exports.verify = async (req, res, next) => {
     }
 }
 
-module.exports.usernameUnique = async (req, res, next) => {
+// ----------------------------- { username }  --------------------------------
+// unique username 
+module.exports.uniqueUsername = async (req, res, next) => {
     try {
         const { username } = req?.body
-        const isExits = await userModal.findOne({ username: username })
+        const isExits = await userModal.findOne({ username })
         if (isExits) {
-            throw new Error('username already exists.')
+            throw new Error('username already exits')
         }
-        res.status(200).json({
-            status: true,
-            message: 'verified username'
-        })
+        next()
     } catch (error) {
         res.status(409).json({
             status: false,
@@ -38,17 +37,80 @@ module.exports.usernameUnique = async (req, res, next) => {
     }
 }
 
-module.exports.emailUnique = async (req, res, next) => {
+// username validation 
+module.exports.isUsername = async (req, res, next) => {
+    try {
+        const { username } = req?.body
+        if (!username) {
+            throw new Error('username is required')
+        }
+        const regex = /\s/;
+        if (regex.test(username)) {
+            throw new Error('invalid username')
+        }
+        next()
+    } catch (error) {
+        res.status(409).json({
+            status: false,
+            message: error?.message
+        })
+    }
+}
+
+
+// ------------------------------- { email }----------------------------------
+// Unique Email 
+module.exports.uniqueEmail = async (req, res, next) => {
     try {
         const { email } = req?.body
-        const isExits = await userModal.findOne({ email: email, status: true })
+        const isExits = await userModal.findOne({ email })
         if (isExits) {
-            throw new Error('email already exists.')
+            if (isExits?.status) {
+                throw new Error('email already exits')
+            }
+            else {
+                req.email_data = isExits
+            }
         }
+        next()
+    } catch (error) {
         res.status(409).json({
-            status: true,
-            message: 'verified email'
+            status: false,
+            message: error?.message
         })
+    }
+}
+
+// email validation 
+module.exports.isEmail = async (req, res, next) => {
+    try {
+        const { email } = req?.body
+        if (!email) {
+            throw new Error('email is required')
+        }
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const isValid = pattern.test(email);
+        if (!isValid) {
+            throw new Error('invalid email format')
+        }
+        next()
+    } catch (error) {
+        res.status(409).json({
+            status: false,
+            message: error?.message
+        })
+    }
+}
+// fetch data using email 
+module.exports.emailData = async (req, res, next) => {
+    try {
+        const { email } = req.body
+        const isData = await userModal.findOne({ email })
+        if (isData === null) {
+            throw new Error('user not exits')
+        }
+        req.email_data = isData
+        next()
     } catch (error) {
         res.status(409).json({
             status: false,
