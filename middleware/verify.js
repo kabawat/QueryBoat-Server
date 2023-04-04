@@ -101,14 +101,17 @@ module.exports.isEmail = async (req, res, next) => {
         })
     }
 }
+
 // fetch data using email 
 module.exports.emailData = async (req, res, next) => {
     try {
         const { email } = req.body
+        console.log('here')
         const isData = await userModal.findOne({ email })
         if (isData === null) {
             throw new Error('user not exits')
         }
+        console.log('here 2')
         req.email_data = isData
         next()
     } catch (error) {

@@ -3,6 +3,10 @@ const URL = `mongodb+srv://QueryBoat:ty9we3ys86@queryboat.x19vz8s.mongodb.net/Qu
 mongoose.connect(URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+}).then((res) => {
+    console.log(res)
+}).catch(Error => {
+    console.log(Error.message)
 })
 
 const userSchema = new mongoose.Schema({

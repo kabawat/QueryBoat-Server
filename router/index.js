@@ -17,8 +17,8 @@ router.get('/', (req, res) => {
 })
 
 // registration
-router.post('/sendotp', uniqueEmail, send_otp)
-router.post('/verify-email', verifyOtp)
+router.post('/sendotp', isEmail, uniqueEmail, send_otp)
+router.post('/verify-email', emailData, verifyOtp)
 router.post('/signup', isEmail, isUsername, uniqueUsername, emailData, signup)
 router.post('/update_profile_picture', isEmail, emailData, update_profile_picture)
 
