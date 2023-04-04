@@ -16,6 +16,7 @@ const sendEmail = (transport, mailoption, res) => {
 
 module.exports.signup = async (req, res) => {
     try {
+        const { username, password } = req.body
         const { _id, email, status } = req?.email_data
         if (!req?.body?.password) {
             throw new Error('password is required')
@@ -47,7 +48,8 @@ module.exports.signup = async (req, res) => {
                 <p>Thank you for choosing QueryBoat. We hope you enjoy using our service!</p>
               </div>`
         }
-
+        
+        const token = jwt.sign({ _id }, PRIVATE_KEY_JWT)
         const update = await userModal.updateOne(
             { email: email },
             {
@@ -55,13 +57,13 @@ module.exports.signup = async (req, res) => {
                     username: username,
                     status: true,
                     password: password,
+                    token
                 }
             }
         );
         if (update.modifiedCount !== 1) {
             throw new Error('Something went wrong')
         }
-        const token = jwt.sign({ _id }, PRIVATE_KEY_JWT)
         sendEmail(transport, mailoption, res)
         res.status(200).json({
             status: true,

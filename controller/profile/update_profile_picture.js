@@ -12,7 +12,7 @@ module.exports.update_profile_picture = async (req, res) => {
                 { email: email },
                 {
                     $set: {
-                        profile_image: req?.body?.image
+                        profile_image: '/user/profile.png'
                     }
                 }
             );
@@ -20,7 +20,6 @@ module.exports.update_profile_picture = async (req, res) => {
                 throw new Error('profile picture not updated')
             }
         } else {
-            // let profile_image = '/user/profile.png'
             const { profile } = req?.files;
             if (profile) {
                 if (profile?.length) {

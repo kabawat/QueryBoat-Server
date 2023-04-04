@@ -3,7 +3,7 @@ module.exports.profile = async (req, res) => {
     try {
         const { token } = req.headers
         const { user } = req.params
-        const profileData = await userModal.findOne({ username: user, token: token })
+        const profileData = await userModal.findOne({ username: user, token })
         if (!profileData) {
             throw new Error('something wrong')
         }
