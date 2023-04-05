@@ -36,12 +36,12 @@ const startSocketServer = () => {
 
         // when new user join Query Boat chat 
         socket.on('New User Join', data => {
-            socketTablehandler(data)
+            socketTablehandler(data, socket.id)
         })
 
         // when user refresh the page 
         socket.on('refresh', data => {
-            socketTableUpdate(data)
+            socketTableUpdate(data, socket.id)
         })
 
     });
@@ -68,10 +68,10 @@ const socketTablehandler = async (data) => {
 }
 
 // update 
-const socketTableUpdate = async (data) => {
+const socketTableUpdate = async (data, id) => {
     try {
-        const update = await socketModal.updateOne({ username: data.username }, {
-            [data.username]: data.id
+        const update = await socketModal.replaceOne({ username: data.username }, {
+            [data.username]: id
         })
         if (update.modifiedCount !== 1) {
             throw new Error('Something went wrong')
