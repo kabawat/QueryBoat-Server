@@ -3,13 +3,6 @@ const http = require('http')
 const { Server } = require('socket.io')
 const app = express()
 const { userModal } = require('./controller')
-const server = http.createServer(app)
-const io = new Server(server, {
-    cors: {
-        origin: ['http://localhost:3000', 'https://socket-client.onrender.com']
-    }
-})
-
 const fileUpload = require('express-fileupload')
 const bodyParser = require('body-parser')
 const path = require('path')
@@ -19,13 +12,21 @@ const cors = require('cors')
 const port = process.env.PORT || 2917
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cors())
+app.use(cors(
+    { origin: ['http://localhost:3000', 'https://query-boat.onrender.com'] }
+))
 app.use(bodyParser.json())
-
 app.use(fileUpload())
 app.use('/user', express.static(path.join(__dirname, 'public/user')))
 app.use(router)
 
+
+const server = http.createServer(app)
+const io = new Server(server, {
+    cors: {
+        origin: ['http://localhost:3000', 'https://query-boat.onrender.com']
+    }
+})
 
 // socket data 
 const startSocketServer = () => {
