@@ -2,7 +2,7 @@ const express = require('express')
 const http = require('http')
 const { Server } = require('socket.io')
 const app = express()
-const { socketModal } = require('./controller')
+const { userModal } = require('./controller')
 const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
@@ -30,20 +30,20 @@ app.use(router)
 // socket data 
 const startSocketServer = () => {
     io.on('connection', (socket) => {
-        socket.on('disconnect', () => {
-            console.log('A user disconnected:', socket.id);
-        });
-
         // when new user join Query Boat chat 
-        socket.on('New User Join', data => {
-            socketTablehandler(data, socket.id)
+        socket.on('New User Join', username => {
+            socketTableUpdate(username, socket)
         })
 
         // when user refresh the page 
-        socket.on('refresh', data => {
-            socketTableUpdate(data, socket.id)
+        socket.on('refresh', username => {
+            socketTableUpdate(username, socket)
         })
 
+        socket.on('disconnect', () => {
+            console.log('A user disconnected:', socket.id);
+
+        });
     });
 };
 
@@ -55,23 +55,11 @@ server.listen(port, () => {
 
 
 // insert new data 
-const socketTablehandler = async (data) => {
-    try {
-        const modal = new socketModal({
-            username: data.username,
-            [data.username]: data.id
-        })
-        await modal.save()
-    } catch (error) {
-        console.log(error.message)
-    }
-}
-
 // update 
-const socketTableUpdate = async (data, id) => {
+const socketTableUpdate = async (username, socket) => {
     try {
-        const update = await socketModal.replaceOne({ username: data.username }, {
-            [data.username]: id
+        const update = await userModal.updateOne({ username }, {
+            chatID: socket.id,
         })
         if (update.modifiedCount !== 1) {
             throw new Error('Something went wrong')

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-mongoose.set('strictQuery', true);
+// mongoose.set('strictQuery', true);
 const URL = `mongodb+srv://QueryBoat:ty9we3ys86@queryboat.x19vz8s.mongodb.net/QueryBoat?retryWrites=true&w=majority`
 mongoose.connect(URL, {
     useNewUrlParser: true,
@@ -28,6 +28,9 @@ const userSchema = new mongoose.Schema({
     chatid: {
         type: String,
     },
+    chatID: {
+        type: String,
+    },
     token: String,
     profile_image: String
 }, { timestamps: true })
@@ -52,7 +55,17 @@ const chatTable = new mongoose.Schema({
     }
 })
 
-const chatSocket = new mongoose.Schema({}, { strict: false })
+const chatSocket = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    chatID: {
+        type: String,
+        required: true
+    }
+})
 
 
 const chatModal = new mongoose.model('chatList', chatTable)

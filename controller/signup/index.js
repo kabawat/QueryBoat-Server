@@ -48,7 +48,7 @@ module.exports.signup = async (req, res) => {
                 <p>Thank you for choosing QueryBoat. We hope you enjoy using our service!</p>
               </div>`
         }
-        
+
         const token = jwt.sign({ _id }, PRIVATE_KEY_JWT)
         const update = await userModal.updateOne(
             { email: email },
@@ -57,7 +57,7 @@ module.exports.signup = async (req, res) => {
                     username: username,
                     status: true,
                     password: password,
-                    token
+                    token,
                 }
             }
         );
