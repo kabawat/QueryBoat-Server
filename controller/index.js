@@ -1,9 +1,11 @@
 const mongoose = require('mongoose')
 // mongoose.set('strictQuery', true);
-const URL = `mongodb+srv://QueryBoat:ty9we3ys86@queryboat.x19vz8s.mongodb.net/QueryBoat?retryWrites=true&w=majority`
+const URL = `mongodb+srv://QueryBoat:ty9we3ys86@queryboat.04hkymt.mongodb.net/QueryBoat?retryWrites=true&w=majority`
 mongoose.connect(URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+}).then(() => { 
+    console.log('connect')
 })
 
 const userSchema = new mongoose.Schema({
