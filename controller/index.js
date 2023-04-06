@@ -4,7 +4,7 @@ const URL = `mongodb+srv://QueryBoat:ty9we3ys86@queryboat.04hkymt.mongodb.net/Qu
 mongoose.connect(URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-}).then(() => { 
+}).then(() => {
     console.log('connect')
 })
 
@@ -27,9 +27,6 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    chatid: {
-        type: String,
-    },
     chatID: {
         type: String,
     },
@@ -40,7 +37,7 @@ const userSchema = new mongoose.Schema({
 
 // user Chat table 
 const chatTable = new mongoose.Schema({
-    chatID: {
+    image: {
         type: String,
         require
     },
@@ -51,27 +48,9 @@ const chatTable = new mongoose.Schema({
     receiver: {
         type: String
     },
-    date: {
-        type: Date,
-        default: Date.now
-    }
-})
-
-const chatSocket = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    chatID: {
-        type: String,
-        required: true
-    }
-})
-
+}, { timestamps: true })
 
 const chatModal = new mongoose.model('chatList', chatTable)
-const socketModal = new mongoose.model('socketIds', chatSocket)
 const userModal = new mongoose.model('userdata', userSchema)
 
-module.exports = { userModal, chatModal, socketModal }
+module.exports = { userModal, chatModal }

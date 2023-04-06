@@ -8,7 +8,8 @@ const { login } = require('../controller/login')
 const { verify, isUsername, isEmail, uniqueUsername, emailData, uniqueEmail } = require('../middleware/verify')
 const { profile } = require('../controller/profile')
 const { update_profile_picture } = require('../controller/profile/update_profile_picture')
-const { chatlist } = require('../controller/chat')
+const { contact_list, new_chat, individualChat } = require('../controller/chat')
+const { receiver_profile } = require('../controller/profile/receiver_profile')
 router.get('/', (req, res) => {
     res.status(200).json({
         message: 'wellcome to Query Boat',
@@ -25,10 +26,16 @@ router.post('/update_profile_picture', isEmail, emailData, update_profile_pictur
 
 // login 
 router.post('/login', verifyLogin, login)
-
 router.get('/profile/:user', verify, profile)
 
 
 // chat 
-router.get('/chatlist', chatlist)
+router.get('/contact_list', contact_list)
+router.post('/new_chat', verify, new_chat)
+router.get('/chatlist/:sender', verify, individualChat)
+
+
+// receiver_profile
+
+router.get('/receiver/:receiver', verify, receiver_profile)
 module.exports = router
