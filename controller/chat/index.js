@@ -1,7 +1,7 @@
 const { userModal, chatModal } = require('../')
 module.exports.contact_list = async (req, res) => {
     try {
-        const data = await userModal.find({}, 'username chatID profile_image email')
+        const data = await userModal.find({ status: true }, 'username chatID profile_image email')
         res.status(200).json({
             data: data,
             status: true

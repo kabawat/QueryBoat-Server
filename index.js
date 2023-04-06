@@ -2,7 +2,7 @@ const express = require('express')
 const http = require('http')
 const { Server } = require('socket.io')
 const app = express()
-const { userModal } = require('./controller')
+const { userModal, chatModal } = require('./controller')
 const fileUpload = require('express-fileupload')
 const bodyParser = require('body-parser')
 const path = require('path')
@@ -41,6 +41,11 @@ const startSocketServer = () => {
             socketTableUpdate(username, socket)
         })
 
+        // chat 
+        socket.on('Send Message', data => {
+            sendMessageHandle(data, io)
+        })
+
         socket.on('disconnect', () => {
             console.log('A user disconnected:', socket.id);
 
@@ -57,7 +62,7 @@ server.listen(port, () => {
 
 // insert new data 
 // update 
-const socketTableUpdate = async (username, socket) => {
+async function socketTableUpdate(username, socket) {
     try {
         const update = await userModal.updateOne({ username }, {
             chatID: socket.id,
@@ -67,5 +72,32 @@ const socketTableUpdate = async (username, socket) => {
         }
     } catch (error) {
 
+    }
+}
+
+async function sendMessageHandle(data, io) {
+    const { message, time, sender, receiver } = data
+    const chat = {
+        message,
+        time,
+        sender: sender?.username,
+        receiver: receiver?.username,
+    }
+    const isExist = await chatModal.findOne({
+        sender: sender?.username,
+        receiver: receiver?.username
+    })
+    if (isExist) {
+        io.to(sender?.chatID).emit("Received Message", chat)
+    } else {
+        const newChat = new chatModal({
+            image: receiver?.image,
+            sender: sender?.username,
+            receiver: receiver?.username
+        })
+        const res = await newChat.save()
+        if (res) {
+            io.to(sender?.chatID).emit('Received New Chat', chat)
+        }
     }
 }
