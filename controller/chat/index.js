@@ -68,3 +68,23 @@ module.exports.individualChat = async (req, res) => {
         })
     }
 }
+
+// remove individual chat
+module.exports.remove_chat = async (req, res) => {
+    const { sender, receiver } = req.body
+    try {
+        const remove = await chatModal.deleteOne({ sender, receiver })
+        if (!remove) {
+            throw new Error('Error removing chat')
+        }
+        res.status(200).json({
+            status: true,
+            message: 'remove chat success'
+        })
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error.message
+        })
+    }
+}

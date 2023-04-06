@@ -8,7 +8,7 @@ const { login } = require('../controller/login')
 const { verify, isUsername, isEmail, uniqueUsername, emailData, uniqueEmail } = require('../middleware/verify')
 const { profile } = require('../controller/profile')
 const { update_profile_picture } = require('../controller/profile/update_profile_picture')
-const { contact_list, new_chat, individualChat } = require('../controller/chat')
+const { contact_list, new_chat, individualChat, remove_chat } = require('../controller/chat')
 const { receiver_profile } = require('../controller/profile/receiver_profile')
 router.get('/', (req, res) => {
     res.status(200).json({
@@ -33,7 +33,7 @@ router.get('/profile/:user', verify, profile)
 router.get('/contact_list', contact_list)
 router.post('/new_chat', verify, new_chat)
 router.get('/chatlist/:sender', verify, individualChat)
-
+router.post('/remove_chat', verify, remove_chat)
 
 // receiver_profile
 
