@@ -1,4 +1,4 @@
-const { userModal, chatModal } = require('../')
+const { userModal } = require('../')
 module.exports.contact_list = async (req, res) => {
     try {
         const data = await userModal.find({ status: true }, 'username chatID profile_image email')
@@ -16,21 +16,24 @@ module.exports.contact_list = async (req, res) => {
 
 // create individual chat 
 module.exports.new_chat = async (req, res) => {
-    const { image, sender, receiver } = req.body
+    const { image, username, contact } = req.body
     try {
-        const isExist = await chatModal?.findOne({ sender, receiver })
+        const findData = await userModal.findOne({ username: username })
+        if (!findData) {
+            throw new Error('invalid Username')
+        }
+        const isExist = findData?.contactList?.some(person => person.contact === contact);
         if (isExist) {
-            throw new Error('chat already exists')
+            throw new Error('Chat Already Exists')
         }
-        const chatData = new chatModal({
-            image: image,
-            sender: sender,
-            receiver: receiver,
+        const arr = [...findData?.contactList, { contact: contact, image: image }]
+        let uniqueArr = arr?.filter((obj, index, self) =>
+            index === self.findIndex((t) => t.contact === obj.contact)
+        );
+        const isUpdate = await userModal.updateOne({ username }, {
+            contactList: uniqueArr
         })
-        const saveData = await chatData.save()
-        if (!saveData) {
-            throw new Error('Error saving data')
-        }
+
         res.status(200).json({
             status: true,
             message: 'chat created'
@@ -47,7 +50,11 @@ module.exports.new_chat = async (req, res) => {
 module.exports.individualChat = async (req, res) => {
     const { sender } = req.params
     try {
-        const data = await chatModal.find({ sender: sender }, 'image receiver')
+        const data = await userModal.find({ username: sender }, 'contactList')
+        contact_list = data[0]?.contactList?.map((item) => {
+            const { contact, image } = item
+            return { contact, image }
+        })
         if (!data) {
             res.status(200).json({
                 status: true,
@@ -58,7 +65,7 @@ module.exports.individualChat = async (req, res) => {
             res.status(200).json({
                 status: true,
                 message: 'success',
-                data: data
+                data: contact_list
             })
         }
     } catch (error) {
@@ -71,12 +78,20 @@ module.exports.individualChat = async (req, res) => {
 
 // remove individual chat
 module.exports.remove_chat = async (req, res) => {
-    const { sender, receiver } = req.body
+    const { username, contact } = req.body
     try {
-        const remove = await chatModal.deleteOne({ sender, receiver })
-        if (!remove) {
-            throw new Error('Error removing chat')
+        const data = await userModal.findOne({ username })
+        if (!data?.contactList) {
+            throw new Error('no more chat ')
         }
+        const newList = data?.contactList?.filter((curChat) => {
+            if (contact !== curChat?.contact) {
+                return curChat
+            }
+        })
+        await userModal.updateOne({ username }, {
+            contactList: newList
+        })
         res.status(200).json({
             status: true,
             message: 'remove chat success'

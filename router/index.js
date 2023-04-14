@@ -30,7 +30,7 @@ router.get('/profile/:user', verify, profile)
 
 
 // chat 
-router.get('/contact_list', contact_list)
+router.get('/contact_list', verify, contact_list)
 router.post('/new_chat', verify, new_chat)
 router.get('/chatlist/:sender', verify, individualChat)
 router.post('/remove_chat', verify, remove_chat)

@@ -31,26 +31,21 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     token: String,
-    profile_image: String
-}, { timestamps: true })
+    profile_image: String,
 
+    contactList: [{
+        contact: {
+            type: String,
+            required: true
+        },
+        image: {
+            type: String,
+            required: true
+        }
+    }]
+}, { timestamps: true });
+userSchema.index({ "contactList.phone": 1 }, { unique: true, sparse: true });
 
-// user Chat table 
-const chatTable = new mongoose.Schema({
-    image: {
-        type: String,
-        require
-    },
-    sender: {
-        type: String,
-        require
-    },
-    receiver: {
-        type: String
-    },
-}, { timestamps: true })
-
-const chatModal = new mongoose.model('chatList', chatTable)
 const userModal = new mongoose.model('userdata', userSchema)
 
-module.exports = { userModal, chatModal }
+module.exports = { userModal }
