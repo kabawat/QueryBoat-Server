@@ -44,6 +44,7 @@ const userSchema = new mongoose.Schema({
         }
     }]
 }, { timestamps: true });
+
 userSchema.index({ "contactList.phone": 1 }, { unique: true, sparse: true });
 
 const userModal = new mongoose.model('userdata', userSchema)
