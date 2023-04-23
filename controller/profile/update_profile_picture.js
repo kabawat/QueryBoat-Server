@@ -1,3 +1,4 @@
+const { unlinkSync } = require('fs')
 const { userModal } = require('..')
 const path = require('path')
 module.exports.update_profile_picture = async (req, res) => {
@@ -18,6 +19,10 @@ module.exports.update_profile_picture = async (req, res) => {
             );
             if (update.modifiedCount !== 1) {
                 throw new Error('profile picture not updated')
+            }
+            if (req?.body?.oldImage) {
+                const fileDir = path.join(rootDir, `public/${req?.body?.oldImage}`)
+                unlinkSync(fileDir)
             }
         } else {
             const { profile } = req?.files;
@@ -47,6 +52,10 @@ module.exports.update_profile_picture = async (req, res) => {
                     throw new Error('profile picture not updated')
                 }
                 profile.mv(saveFile);
+                if (req?.body?.oldImage) {
+                    const fileDir = path.join(rootDir, `public/${req?.body?.oldImage}`)
+                    unlinkSync(fileDir)
+                }
             } else {
                 throw new Error('image is required')
             }

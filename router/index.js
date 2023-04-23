@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 router.post('/sendotp', isEmail, uniqueEmail, send_otp)
 router.post('/verify-email', emailData, verifyOtp)
 router.post('/signup', isEmail, isUsername, uniqueUsername, emailData, signup)
-router.post('/update_profile_picture', isEmail, emailData, update_profile_picture)
+router.post('/update_profile_picture', verify, isEmail, emailData, update_profile_picture)
 
 router.post('/forgot-otp', isEmail, emailData, ForgotOtp)
 router.post('/forgot-password-verify', isEmail, emailData, forgetVerify)

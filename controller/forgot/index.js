@@ -82,7 +82,7 @@ function emailbody(password) {
         </style>
         <div class="container">
             <div class="headeremail">
-                <h1>Password Reset Confirmation</h1>
+                <h1>Password Reset Information</h1>
             </div>
             <p>Hi there,</p>
             <p>We're writing to let you know that your password has been successfully reset. If you didn't make this request, please contact us immediately.</p>
@@ -121,7 +121,7 @@ module.exports.ForgotOtp = async (req, res) => {
         let mailOptions = {
             from: EMAIL_USER,
             to: email,
-            subject: "Email Verification",
+            subject: "Forgot Password",
             html: `
             <html>
                 <head>
