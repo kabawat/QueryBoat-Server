@@ -32,17 +32,7 @@ const userSchema = new mongoose.Schema({
     },
     token: String,
     profile_image: String,
-
-    contactList: [{
-        contact: {
-            type: String,
-            required: true
-        },
-        image: {
-            type: String,
-            required: true
-        }
-    }]
+    contactList: [{ type: String }]
 }, { timestamps: true });
 
 userSchema.index({ "contactList.phone": 1 }, { unique: true, sparse: true });

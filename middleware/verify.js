@@ -56,6 +56,23 @@ module.exports.isUsername = async (req, res, next) => {
         })
     }
 }
+// fetch data using email 
+module.exports.userData = async (req, res, next) => {
+    try {
+        const { username } = req.params
+        const isData = await userModal.findOne({ username })
+        if (isData === null) {
+            throw new Error('user not exits')
+        }
+        req.userData = isData
+        next()
+    } catch (error) {
+        res.status(409).json({
+            status: false,
+            message: error?.message
+        })
+    }
+}
 
 
 // ------------------------------- { email }----------------------------------

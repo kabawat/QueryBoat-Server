@@ -1,7 +1,11 @@
 const { userModal } = require('../')
 module.exports.contact_list = async (req, res) => {
     try {
-        const data = await userModal.find({ status: true }, 'username chatID profile_image email')
+        const { status, contactList } = req?.email_data
+        if (!status) {
+            throw new Error('invalid credentials')
+        }
+        const data = await userModal.find({ username: { $nin: contactList } }, 'username chatID profile_image email')
         res.status(200).json({
             data: data,
             status: true
@@ -16,22 +20,19 @@ module.exports.contact_list = async (req, res) => {
 
 // create individual chat 
 module.exports.new_chat = async (req, res) => {
-    const { image, username, contact } = req.body
+    const { username, contact } = req.body
     try {
         const findData = await userModal.findOne({ username: username })
         if (!findData) {
             throw new Error('invalid Username')
         }
-        const isExist = findData?.contactList?.some(person => person.contact === contact);
+        const isExist = findData?.contactList?.includes(contact);
         if (isExist) {
             throw new Error('Chat Already Exists')
         }
-        const arr = [...findData?.contactList, { contact: contact, image: image }]
-        let uniqueArr = arr?.filter((obj, index, self) =>
-            index === self.findIndex((t) => t.contact === obj.contact)
-        );
+        const arr = [...findData?.contactList, contact]
         const isUpdate = await userModal.updateOne({ username }, {
-            contactList: uniqueArr
+            contactList: [...new Set(arr)]
         })
 
         res.status(200).json({
@@ -50,10 +51,14 @@ module.exports.new_chat = async (req, res) => {
 module.exports.individualChat = async (req, res) => {
     const { sender } = req.params
     try {
-        const data = await userModal.find({ username: sender }, 'contactList')
-        contact_list = data[0]?.contactList?.map((item) => {
-            const { contact, image } = item
-            return { contact, image }
+        const findContact = await userModal.findOne({ username: sender }, 'contactList')
+        if (!findContact) {
+            throw new Error('invalid user')
+        }
+        const data = await userModal.find({ username: { $in: findContact?.contactList } }, 'username profile_image');
+        contact_list = data?.map((item) => {
+            const { username, profile_image } = item
+            return { contact: username, image: profile_image }
         })
         if (!data) {
             res.status(200).json({
@@ -85,7 +90,7 @@ module.exports.remove_chat = async (req, res) => {
             throw new Error('no more chat ')
         }
         const newList = data?.contactList?.filter((curChat) => {
-            if (contact !== curChat?.contact) {
+            if (contact !== curChat) {
                 return curChat
             }
         })
