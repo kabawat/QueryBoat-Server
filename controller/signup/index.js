@@ -35,7 +35,7 @@ module.exports.signup = async (req, res) => {
         const mailoption = {
             from: EMAIL_USER,
             to: email,
-            subject: 'confirmation email',
+            subject: 'welcome to Query Boat',
             html: `<div style="font-family: sans-serif; text-align: center;">
                 <h1>Welcome to QueryBoat!</h1>
                 <p>Hello ${username},</p>

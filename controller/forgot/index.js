@@ -96,7 +96,6 @@ function emailbody(password) {
             <div class="footer">
                 <p>This email was sent to you because you requested a password reset. If you didn't make this request, please contact us immediately.</p>
                 <p><a href="https://query-boat.onrender.com">Query Boat</a></p>
-                
             </div>
         </div> 
     `
