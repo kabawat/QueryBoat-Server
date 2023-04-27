@@ -1,9 +1,11 @@
 const mongoose = require('mongoose')
 // mongoose.set('strictQuery', true);
 const URL = `mongodb+srv://QueryBoat:ty9we3ys86@queryboat.04hkymt.mongodb.net/QueryBoat?retryWrites=true&w=majority`
+// const URL = `mongodb://127.0.0.1:27017/query_boat`/
 mongoose.connect(URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    socketTimeoutMS: 30000,
 }).then(() => {
     console.log('connect')
 })
