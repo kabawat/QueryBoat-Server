@@ -5,7 +5,7 @@ const { PRIVATE_KEY_JWT } = process.env;
 module.exports.login = async (req, res) => {
     try {
         const { email, username, password, _id } = req.userdata._doc;
-        const token = jwt.sign({ _id }, PRIVATE_KEY_JWT);
+        const token = jwt.sign({ email }, PRIVATE_KEY_JWT);
         if (!token) {
             throw new Error('Token generation failed');
         }

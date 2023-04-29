@@ -21,8 +21,12 @@ module.exports.update_profile_picture = async (req, res) => {
                 throw new Error('profile picture not updated')
             }
             if (req?.body?.oldImage) {
-                const fileDir = path.join(rootDir, `public/${req?.body?.oldImage}`)
-                unlinkSync(fileDir)
+                try {
+                    const fileDir = path.join(rootDir, `public/${req?.body?.oldImage}`)
+                    unlinkSync(fileDir)
+                } catch (error) {
+                    
+                }
             }
         } else {
             const { profile } = req?.files;

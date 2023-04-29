@@ -11,10 +11,11 @@ const { update_profile_picture } = require('../controller/profile/update_profile
 const { contact_list, new_chat, individualChat, remove_chat } = require('../controller/chat')
 const { receiver_profile } = require('../controller/profile/receiver_profile')
 const { ForgotOtp, ForgotPassword } = require('../controller/forgot')
+const { googleAuth } = require('../controller/google-auth')
 router.get('/', (req, res) => {
     res.status(200).json({
         message: 'wellcome to Query Boat',
-        status: true,
+        status: true,   
         data: []
     })
 })
@@ -43,4 +44,8 @@ router.post('/remove_chat', verify, remove_chat)
 // receiver_profile
 router.get('/receiver/:receiver', verify, receiver_profile)
 
+
+// google auth 
+router.post('/contact_list', verify, emailData, contact_list)
+router.post('/google_auth', googleAuth)
 module.exports = router

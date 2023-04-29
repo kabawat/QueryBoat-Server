@@ -49,7 +49,7 @@ module.exports.signup = async (req, res) => {
               </div>`
         }
 
-        const token = jwt.sign({ _id }, PRIVATE_KEY_JWT)
+        const token = jwt.sign({ email }, PRIVATE_KEY_JWT)
         const update = await userModal.updateOne(
             { email: email },
             {
