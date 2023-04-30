@@ -12,10 +12,11 @@ const { contact_list, new_chat, individualChat, remove_chat } = require('../cont
 const { receiver_profile } = require('../controller/profile/receiver_profile')
 const { ForgotOtp, ForgotPassword } = require('../controller/forgot')
 const { googleAuth } = require('../controller/google-auth')
+const { g_uploadFile } = require('../controller/google-drive/upload')
 router.get('/', (req, res) => {
     res.status(200).json({
         message: 'wellcome to Query Boat',
-        status: true,   
+        status: true,
         data: []
     })
 })
@@ -48,4 +49,7 @@ router.get('/receiver/:receiver', verify, receiver_profile)
 // google auth 
 router.post('/contact_list', verify, emailData, contact_list)
 router.post('/google_auth', googleAuth)
+
+// file upload 
+router.post('/upload_file', g_uploadFile)
 module.exports = router

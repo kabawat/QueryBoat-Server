@@ -13,7 +13,7 @@ const port = process.env.PORT || 2917
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors(
-    { origin: ['http://localhost:3000', 'https://query-boat.onrender.com','https://blissful-shadow-99347.pktriot.net'] }
+    { origin: ['http://localhost:3000', 'https://query-boat.onrender.com', 'https://blissful-shadow-99347.pktriot.net'] }
 ))
 app.use(bodyParser.json())
 app.use(fileUpload())
@@ -24,7 +24,7 @@ app.use(router)
 const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
-        origin: ['http://localhost:3000', 'https://query-boat.onrender.com','https://blissful-shadow-99347.pktriot.net']
+        origin: ['http://localhost:3000', 'https://query-boat.onrender.com', 'https://blissful-shadow-99347.pktriot.net']
     }
 })
 
@@ -75,9 +75,11 @@ async function socketTableUpdate(username, socket) {
 }
 
 async function sendMessageHandle(data, io) {
-    const { message, time, sender, receiver } = data
+    const { message, time, sender, receiver, msgType, file } = data
     const chat = {
         message,
+        msgType,
+        file,
         time,
         contact: sender?.username,
         chatID: sender?.chatID,
