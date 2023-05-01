@@ -34,7 +34,15 @@ const userSchema = new mongoose.Schema({
     },
     token: String,
     profile_image: String,
-    contactList: [{ type: String }]
+    contactList: [{ type: String }],
+    lastSeen: {
+        type: Date,
+        default: Date.now()
+    },
+    isOnline: {
+        type: Boolean,
+        default: true
+    }
 }, { timestamps: true });
 
 userSchema.index({ "contactList.phone": 1 }, { unique: true, sparse: true });

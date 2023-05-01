@@ -48,6 +48,7 @@ const startSocketServer = () => {
 
         socket.on('disconnect', () => {
             console.log('A user disconnected:', socket.id);
+            lastSeenUpadate(socket.id)
         });
     });
 };
@@ -65,6 +66,8 @@ async function socketTableUpdate(username, socket) {
     try {
         const update = await userModal.updateOne({ username }, {
             chatID: socket.id,
+            lastSeen: new Date(),
+            isOnline: true,
         })
         if (update.modifiedCount !== 1) {
             throw new Error('Something went wrong')
@@ -74,6 +77,19 @@ async function socketTableUpdate(username, socket) {
     }
 }
 
+async function lastSeenUpadate(chatID) {
+    try {
+        const update = await userModal.updateOne({ chatID }, {
+            lastSeen: new Date(),
+            isOnline: false,
+        })
+        if (update.modifiedCount !== 1) {
+            throw new Error('Something went wrong')
+        }
+    } catch (error) {
+
+    }
+}
 async function sendMessageHandle(data, io) {
     const { message, time, sender, receiver, msgType, file } = data
     const chat = {
