@@ -55,10 +55,15 @@ module.exports.individualChat = async (req, res) => {
         if (!findContact) {
             throw new Error('invalid user')
         }
-        const data = await userModal.find({ username: { $in: findContact?.contactList } }, 'username profile_image');
+        const data = await userModal.find({ username: { $in: findContact?.contactList } }, 'username profile_image f_name l_name');
         contact_list = data?.map((item) => {
-            const { username, profile_image } = item
-            return { contact: username, image: profile_image }
+            const { username, profile_image, f_name, l_name } = item
+            return {
+                contact: username,
+                image: profile_image,
+                f_name,
+                l_name
+            }
         })
         if (!data) {
             res.status(200).json({

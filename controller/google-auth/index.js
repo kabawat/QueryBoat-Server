@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { PRIVATE_KEY_JWT } = process.env;
 module.exports.googleAuth = async (req, res) => {
     try {
-        const { email, username, password, profile_image } = req.body
+        const { email, username, password, profile_image, f_name, l_name } = req.body
         const isExist = await userModal.findOne({ email, status: true }, 'email username status')
         const token = jwt.sign({ email }, PRIVATE_KEY_JWT);
         if (!token) {
@@ -25,6 +25,8 @@ module.exports.googleAuth = async (req, res) => {
             const dataModal = new userModal({
                 email,
                 token,
+                f_name,
+                l_name,
                 username,
                 password,
                 profile_image,

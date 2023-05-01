@@ -20,7 +20,7 @@ const sendEmail = (transport, mailoption, res) => {
 
 module.exports.send_otp = async (req, res) => {
     try {
-        const { email } = req.body;
+        const { email, f_name, l_name } = req.body;
         // Create email transport
         const transport = nodemailer.createTransport({
             service: "gmail",
@@ -53,7 +53,6 @@ module.exports.send_otp = async (req, res) => {
             const update = await userModal.updateOne(
                 { email },
                 {
-                    email,
                     username: `${username[0]}${otp}`,
                     password: otp,
                 }
@@ -67,6 +66,8 @@ module.exports.send_otp = async (req, res) => {
                 email,
                 username: `${username[0]}${otp}`,
                 password: otp,
+                f_name,
+                l_name
             });
             await userData.save();
         }
