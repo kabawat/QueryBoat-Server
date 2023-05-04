@@ -8,7 +8,7 @@ const { login } = require('../controller/login')
 const { verify, isUsername, isEmail, uniqueUsername, emailData, uniqueEmail } = require('../middleware/verify')
 const { profile } = require('../controller/profile')
 const { update_profile_picture } = require('../controller/profile/update_profile_picture')
-const { contact_list, new_chat, individualChat, remove_chat } = require('../controller/chat')
+const { contact_list, new_chat, individualChat, remove_chat, new_chat_request } = require('../controller/chat')
 const { receiver_profile } = require('../controller/profile/receiver_profile')
 const { ForgotOtp, ForgotPassword } = require('../controller/forgot')
 const { googleAuth } = require('../controller/google-auth')
@@ -39,6 +39,7 @@ router.get('/profile/:user', verify, profile)
 // chat 
 router.post('/contact_list', verify, emailData, contact_list)
 router.post('/new_chat', verify, new_chat)
+router.post('/new_chat_request', verify, new_chat_request)
 router.get('/chatlist/:sender', verify, individualChat)
 router.post('/remove_chat', verify, remove_chat)
 
@@ -48,7 +49,7 @@ router.get('/receiver/:receiver', verify, receiver_profile)
 
 // google auth 
 router.post('/contact_list', verify, emailData, contact_list)
-router.post('/google_auth', googleAuth)
+router.post('/google_signin', googleAuth)
 
 // file upload 
 router.post('/upload_file', g_uploadFile)

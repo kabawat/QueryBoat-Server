@@ -44,7 +44,22 @@ const userSchema = new mongoose.Schema({
     },
     token: String,
     profile_image: String,
-    contactList: [{ type: String }],
+    // contactList: [{ type: String }],
+    contactList: [{
+        contact: {
+            type: String,
+            required: true
+        },
+        chatFile: {
+            type: String,
+            required: true
+        },
+        status: {
+            type: Boolean,
+            default: false,
+            required: true
+        }
+    }],
     lastSeen: {
         type: Date,
         default: Date.now()

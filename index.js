@@ -91,15 +91,11 @@ async function lastSeenUpadate(chatID) {
     }
 }
 async function sendMessageHandle(data, io) {
-    const { message, time, sender, receiver, msgType, file } = data
+    const { sender, chatID, chatFile } = data
     const chat = {
-        message,
-        msgType,
-        file,
-        time,
-        contact: sender?.username,
+        receiver: sender.username,
         chatID: sender?.chatID,
-        image: sender?.image
+        chatFile
     }
-    io.to(receiver?.chatID).emit('Received Message', chat)
+    io.to(chatID).emit('Received Message', chat)
 }
