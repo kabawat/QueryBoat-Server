@@ -1,8 +1,8 @@
+require('dotenv').config()
+const DB_URL = process.env.DB_URL
 const mongoose = require('mongoose')
 // mongoose.set('strictQuery', true);
-const URL = `mongodb+srv://QueryBoat:ty9we3ys86@queryboat.04hkymt.mongodb.net/QueryBoat?retryWrites=true&w=majority`
-// const URL = `mongodb://127.0.0.1:27017/query_boat`
-mongoose.connect(URL, {
+mongoose.connect(DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     socketTimeoutMS: 30000,
