@@ -13,6 +13,7 @@ const { receiver_profile } = require('../controller/profile/receiver_profile')
 const { ForgotOtp, ForgotPassword } = require('../controller/forgot')
 const { googleAuth } = require('../controller/google-auth')
 const { g_uploadFile } = require('../controller/google-drive/upload')
+const download = require('../controller/download')
 router.get('/', (req, res) => {
     res.status(200).json({
         message: 'wellcome to Query Boat',
@@ -53,4 +54,5 @@ router.post('/google_signin', googleAuth)
 
 // file upload 
 router.post('/upload_file', g_uploadFile)
+router.get('/download', download)
 module.exports = router
