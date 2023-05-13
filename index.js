@@ -18,6 +18,10 @@ app.use(cors(
 app.use(bodyParser.json())
 app.use(fileUpload())
 app.use('/user', express.static(path.join(__dirname, 'public/user')))
+app.use('/image', express.static(path.join(__dirname, 'public/image')))
+app.use('/video', express.static(path.join(__dirname, 'public/video')))
+app.use('/pdf', express.static(path.join(__dirname, 'public/pdf')))
+app.use('/audio', express.static(path.join(__dirname, 'public/audio')))
 app.use(router)
 
 
