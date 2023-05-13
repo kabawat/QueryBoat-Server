@@ -116,9 +116,15 @@ module.exports.individualChat = async (req, res) => {
             list.push(curItem?.contact)
         })
         const data = await userModal.find({ username: { $in: list } }, 'username profile_image f_name l_name');
+
         contact_list = data?.map((item, index) => {
-            const { chatFile } = findContact?.contactList[index]
+            let chatFile
             const { username, profile_image, f_name, l_name } = item
+            findContact?.contactList.map((curItem) => {
+                if (username === curItem?.contact){
+                    chatFile = curItem?.chatFile
+                }
+            })
             return {
                 contact: username,
                 image: profile_image,

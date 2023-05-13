@@ -44,7 +44,6 @@ const userSchema = new mongoose.Schema({
     },
     token: String,
     profile_image: String,
-    // contactList: [{ type: String }],
     contactList: [{
         contact: {
             type: String,
@@ -70,8 +69,35 @@ const userSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+const messageSchema = new mongoose.Schema({
+    chatFile: {
+        type: String,
+        required: true,
+    },
+    sender: {
+        required: true,
+        type: String,
+    },
+    message: {
+        type: String,
+        default: ''
+    },
+    file: {
+        type: String,
+        default: ''
+    },
+    msgType: {
+        type: String,
+        default: 'text'
+    },
+    time: {
+        type: Date,
+        default: Date.now
+    }
+})
 userSchema.index({ "contactList.phone": 1 }, { unique: true, sparse: true });
 
-const userModal = new mongoose.model('userdata', userSchema)
+const userModal = new mongoose.model('user-profile', userSchema)
+const messageModal = new mongoose.model('msgStore', messageSchema)
 
-module.exports = { userModal }
+module.exports = { userModal, messageModal }

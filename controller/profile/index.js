@@ -1,5 +1,5 @@
 const { userModal } = require('../')
-module.exports.profile = async (req, res) => {
+async function profile(req, res) {
     try {
         const { token } = req.headers
         const { user } = req.params
@@ -20,3 +20,4 @@ module.exports.profile = async (req, res) => {
         })
     }
 }
+module.exports = profile
